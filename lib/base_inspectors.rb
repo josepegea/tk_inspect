@@ -8,11 +8,11 @@ class Object
   end
 
   def number_of_children_for_tk_inspect
-    0
+    instance_variables.size
   end
 
   def children_for_tk_inspect
-    {}
+    instance_variables.map { |v| [v, instance_variable_get(v)] }.to_h
   end
 end
 
@@ -22,11 +22,11 @@ class Array
   end
 
   def number_of_children_for_tk_inspect
-    size
+    size + super
   end
 
   def children_for_tk_inspect
-    map.with_index { |obj, idx| [ idx.to_s, obj ] }.to_a
+    map.with_index { |obj, idx| [ idx.to_s, obj ] }.to_h.merge(super)
   end
 end
 
@@ -36,10 +36,24 @@ class Hash
   end
 
   def number_of_children_for_tk_inspect
-    size
+    size + super
   end
 
   def children_for_tk_inspect
-    self
+    merge(super)
+  end
+end
+
+class Struct
+  def value_for_tk_inspect
+    "#{size} elements"
+  end
+
+  def number_of_children_for_tk_inspect
+    size + super
+  end
+
+  def children_for_tk_inspect
+    to_h.merge(super)
   end
 end
