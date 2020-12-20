@@ -7,6 +7,7 @@ module TkInspect
         p.vframe(sticky: 'nswe') do |vf|
           @input = vf.text(sticky: 'nswe', value: "Ruby console\nWrite Ruby code here\n> ", h_weight: 1)
           vf.hframe(sticky: 'e', h_weight: 0) do |hf|
+            hf.button(text: "Class Browser", on_click: :open_class_browser)
             hf.button(text: "Inspect", on_click: :inspect)
             hf.button(text: "Run selected", on_click: :run_selected)
           end
@@ -23,6 +24,10 @@ module TkInspect
 
     def inspect(e)
       console.show_inspector
+    end
+
+    def open_class_browser(e)
+      console.open_class_browser
     end
   end
 end

@@ -24,6 +24,10 @@ module TkInspect
       inspector.refresh
     end
 
+    def open_class_browser
+      class_browser.refresh
+    end
+
     def create_root
       @tk_root = TkComponent::Window.new(title: "Console #{self.object_id}")
       @main_component = TkConsoleRootComponent.new
@@ -33,6 +37,10 @@ module TkInspect
 
     def inspector
       @inspector ||= TkInspect::TkInspector.new(eval_binding)
+    end
+
+    def class_browser
+      @class_browser ||= TkInspect::TkClassBrowser.new
     end
   end
 end
