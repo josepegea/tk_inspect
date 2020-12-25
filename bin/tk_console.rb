@@ -4,7 +4,7 @@ require "bundler/setup"
 require "tk_inspect"
 require "pry"
 
-console = TkInspect::TkConsole.new
+console = TkInspect::Console::Base.new
 console.refresh
 
 Tk.mainloop
