@@ -88,7 +88,7 @@ module TkInspect
         method = klass.instance_method(self.selected_method)
         file, line = method.source_location
         return nil unless file && line
-        return code_for_file(file), line
+        return code_for_file(file), line, file
       end
 
       def code_for_file(file)

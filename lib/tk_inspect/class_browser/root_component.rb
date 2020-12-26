@@ -8,7 +8,7 @@ module TkInspect
       def generate(parent_component, options = {})
         parse_component(parent_component, options) do |p|
           p.vframe(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |vf|
-            vf.hframe(padding: "0 0 0 0", sticky: 'nse', h_weight: 0, v_weight: 1) do |f|
+            vf.hframe(padding: "0 0 0 0", sticky: 'nse', h_weight: 1, v_weight: 0) do |f|
               f.label(text: "Filter")
               f.entry(value: class_browser.class_filter, on_change: :filter_changed)
             end
@@ -45,7 +45,7 @@ module TkInspect
                 end
               end
             end
-            @method_text = vf.text(sticky: 'nswe', h_weight: 1)
+            @code = vf.insert_component(CodeComponent, self, sticky: 'nsew', h_weight: 1, v_weight: 1)
           end
         end
       end
@@ -75,14 +75,12 @@ module TkInspect
         return unless method_name.present? && name_for_method(class_browser.selected_method) != method_name
         class_browser.select_method(method_name)
         regenerate
-        code, line = class_browser.code_for_selected_method
-        if code && line
-          @method_text.tk_item.value = code
-          @method_text.tk_item.select_range("#{line}.0", "#{line}.end")
-          @method_text.native_item.see("#{line}.0")
-        else
-          @method_text.tk_item.value = "Source code not available for #{method_name}"
-        end
+        code, line, filename = class_browser.code_for_selected_method
+        @code.code = code
+        @code.method_name = method_name
+        @code.method_line = line
+        @code.filename = filename
+        @code.update
       end
 
       def filter_changed(e)
