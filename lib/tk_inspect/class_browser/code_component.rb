@@ -37,15 +37,7 @@ module TkInspect
         parse_component(parent_component, options) do |p|
           p.vframe(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |vf|
             @filename_label = vf.label(font: 'TkSmallCaptionFont', sticky: 'ewns', h_weight: 1, v_weight: 0)
-            vf.frame(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |tf|
-              tf.row do |r|
-                @code_text = r.text(sticky: 'nswe', h_weight: 1, v_weight: 1)
-                r.vscroll_bar(linked_to: @code_text, sticky: 'nse', h_weight: 0 , v_weight: 1)
-              end
-              tf.row do |r|
-                r.hscroll_bar(linked_to: @code_text, sticky: 'sew', h_weight: 1, v_weight: 0, columnspan: 2)
-              end
-            end
+            @code_text = vf.text(sticky: 'nswe', h_weight: 1, v_weight: 1, wrap: 'none', scrollers: 'xy')
           end
         end
       end

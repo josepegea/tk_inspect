@@ -6,7 +6,7 @@ module TkInspect
       def generate(parent_component, options = {})
         parse_component(parent_component, options) do |p|
           p.vframe(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |f|
-            f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1,
+            f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1, scrollers: 'y',
                    column_defs: [
                      { key: 'klass', text: 'Class', anchor: 'w' },
                      { key: 'value', text: 'Value', anchor: 'e' }
