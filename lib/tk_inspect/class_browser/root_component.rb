@@ -12,41 +12,43 @@ module TkInspect
               f.label(text: "Filter")
               f.entry(value: class_browser.class_filter, on_change: :filter_changed)
             end
-            vf.hframe(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |f|
-              ([ nil ] + class_browser.selected_class_path).each.with_index do |c, idx|
-                next_in_path = class_browser.selected_class_path[idx]
-                subclasses = class_browser.subclasses_of(c).sort
-                f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1,
-                       scrollers: 'y', heading: label_for_class_count(subclasses.size)) do |t|
-                  subclasses.each do |class_name|
-                    t.tree_node(at: 'end', text: name_for_class(class_name), selected: class_name == next_in_path)
-                  end
-                  t.on_select ->(e) { select_class(e.sender, idx) }
-                end
-              end
-            end
-            vf.hframe(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |f|
-              selected_class = class_browser.selected_class_path.last
-              if selected_class
-                selected_module = class_browser.selected_module
-                modules = class_browser.modules_of(selected_class)
-                f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1, scrollers: 'y',
-                       heading: label_for_modules(selected_class, modules.size), on_select: :select_module) do |t|
-                  modules.each do |mod|
-                    t.tree_node(at: 'end', text: name_for_module(mod), selected: mod == selected_module)
-                  end
-                end
-                selected_method = class_browser.selected_method
-                methods = class_browser.methods_of(selected_module).sort
-                f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1, scrollers: 'y',
-                       heading: label_for_methods(selected_module, methods.size), on_select: :select_method) do |t|
-                  methods.each do |meth|
-                    t.tree_node(at: 'end', text: name_for_method(meth), selected: meth == selected_method)
+            vf.vpaned(sticky: 'nsew', h_weight: 1, v_weight: 1) do |vp|
+              vp.hpaned(sticky: 'nsew', h_weight: 1, v_weight: 1) do |f|
+                ([ nil ] + class_browser.selected_class_path).each.with_index do |c, idx|
+                  next_in_path = class_browser.selected_class_path[idx]
+                  subclasses = class_browser.subclasses_of(c).sort
+                  f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1,
+                         scrollers: 'y', heading: label_for_class_count(subclasses.size)) do |t|
+                    subclasses.each do |class_name|
+                      t.tree_node(at: 'end', text: name_for_class(class_name), selected: class_name == next_in_path)
+                    end
+                    t.on_select ->(e) { select_class(e.sender, idx) }
                   end
                 end
               end
+              vp.hpaned(sticky: 'nsew', h_weight: 1, v_weight: 1) do |f|
+                selected_class = class_browser.selected_class_path.last
+                if selected_class
+                  selected_module = class_browser.selected_module
+                  modules = class_browser.modules_of(selected_class)
+                  f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1, scrollers: 'y',
+                         heading: label_for_modules(selected_class, modules.size), on_select: :select_module) do |t|
+                    modules.each do |mod|
+                      t.tree_node(at: 'end', text: name_for_module(mod), selected: mod == selected_module)
+                    end
+                  end
+                  selected_method = class_browser.selected_method
+                  methods = class_browser.methods_of(selected_module).sort
+                  f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1, scrollers: 'y',
+                         heading: label_for_methods(selected_module, methods.size), on_select: :select_method) do |t|
+                    methods.each do |meth|
+                      t.tree_node(at: 'end', text: name_for_method(meth), selected: meth == selected_method)
+                    end
+                  end
+                end
+              end
+              @code = vp.insert_component(CodeComponent, self, sticky: 'nsew', h_weight: 1, v_weight: 1)
             end
-            @code = vf.insert_component(CodeComponent, self, sticky: 'nsew', h_weight: 1, v_weight: 1)
           end
         end
       end
