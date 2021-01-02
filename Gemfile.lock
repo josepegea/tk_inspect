@@ -9,7 +9,7 @@ PATH
   remote: .
   specs:
     tk_inspect (0.1.0)
-      rouge
+      rouge (~> 3.26)
 
 GEM
   remote: https://rubygems.org/
