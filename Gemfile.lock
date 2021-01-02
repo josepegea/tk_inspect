@@ -9,6 +9,7 @@ PATH
   remote: .
   specs:
     tk_inspect (0.1.0)
+      rouge
 
 GEM
   remote: https://rubygems.org/
@@ -34,6 +35,7 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     rake (10.5.0)
+    rouge (3.26.0)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
