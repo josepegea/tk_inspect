@@ -1,0 +1,57 @@
+module TkInspect
+  module ClassBrowser
+    class Controller
+      attr_accessor :tk_root
+      attr_accessor :main_component
+      attr_accessor :selected_class_path
+      attr_accessor :selected_module
+      attr_accessor :selected_method
+      attr_accessor :class_data_source
+      attr_accessor :module_method_data_source
+
+      def initialize
+        @tk_root = nil
+        @main_component = nil
+        @selected_class_path = []
+        @loaded_code = {}
+        @class_filter = nil
+        @class_data_source = ClassDataSource.new
+        @module_method_data_source = ModuleMethodDataSource.new
+      end
+
+      def refresh
+        @main_component.nil? ? create_root : @main_component.regenerate
+      end
+
+      def create_root
+        @tk_root = TkComponent::Window.new(title: "Class Browser")
+        @main_component = RootComponent.new
+        @main_component.class_browser = self
+        @tk_root.place_root_component(@main_component)
+      end
+
+      def select_class_path(class_path)
+        self.selected_class_path = class_path
+        module_method_data_source.selected_class = class_path.last
+      end
+
+      def code_for_method(meth)
+        return nil unless meth.present?
+        class_name = selected_class_path.last
+        return nil unless class_name.present?
+        klass = Object.const_get(class_name)
+        method = klass.instance_method(meth)
+        file, line = method.source_location
+        return nil unless file && line
+        return code_for_file(file), line, file
+      end
+
+      def code_for_file(file)
+        @loaded_code[file] || begin
+                                @loaded_code[file] = IO.read(file)
+                                @loaded_code[file]
+                              end
+      end
+    end
+  end
+end

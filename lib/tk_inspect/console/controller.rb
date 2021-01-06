@@ -1,6 +1,6 @@
 module TkInspect
   module Console
-    class Base
+    class Controller
       attr_accessor :tk_root
       attr_accessor :main_component
       attr_accessor :eval_binding
@@ -37,11 +37,11 @@ module TkInspect
       end
 
       def inspector
-        @inspector ||= TkInspect::Inspector::Base.new(eval_binding)
+        @inspector ||= TkInspect::Inspector::Controller.new(eval_binding)
       end
 
       def class_browser
-        @class_browser ||= TkInspect::ClassBrowser::Base.new
+        @class_browser ||= TkInspect::ClassBrowser::Controller.new
       end
     end
   end

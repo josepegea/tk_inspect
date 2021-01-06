@@ -36,7 +36,7 @@ module TkInspect
       def generate(parent_component, options = {})
         parse_component(parent_component, options) do |p|
           p.vframe(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |vf|
-            @filename_label = vf.label(font: 'TkSmallCaptionFont', sticky: 'ewns', h_weight: 1, v_weight: 0)
+            @filename_label = vf.label(font: 'TkSmallCaptionFont', sticky: 'ewn', h_weight: 1, v_weight: 0)
             @code_text = vf.text(sticky: 'nswe', h_weight: 1, v_weight: 1, wrap: 'none', scrollers: 'xy')
           end
         end

@@ -1,6 +1,6 @@
 module TkInspect
   module Inspector
-    class Base
+    class Controller
       cattr_accessor :shared_inspector
 
       attr_accessor :inspected_binding
