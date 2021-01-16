@@ -6,7 +6,8 @@ module TkInspect
       attr_accessor :selected_class_path
       attr_accessor :selected_module
       attr_accessor :selected_method
-      attr_accessor :class_data_source
+      attr_accessor :browsing_method
+      attr_accessor :class_data_sources
       attr_accessor :module_method_data_source
 
       def initialize
@@ -15,7 +16,11 @@ module TkInspect
         @selected_class_path = []
         @loaded_code = {}
         @class_filter = nil
-        @class_data_source = ClassDataSource.new
+        @browsing_method = 'hierarchy'
+        @class_data_sources = {
+          hierarchy: ClassTreeDataSource.new,
+          namespaces: ClassNamespaceDataSource.new
+        }.with_indifferent_access
         @module_method_data_source = ModuleMethodDataSource.new
       end
 
@@ -30,14 +35,22 @@ module TkInspect
         @tk_root.place_root_component(@main_component)
       end
 
+      def class_data_source
+        @class_data_sources[browsing_method]
+      end
+
       def select_class_path(class_path)
         self.selected_class_path = class_path
-        module_method_data_source.selected_class = class_path.last
+        module_method_data_source.selected_class = selected_class_name
+      end
+
+      def selected_class_name
+        browsing_method.to_s == 'hierarchy' ? self.selected_class_path.last : self.selected_class_path.join('::')
       end
 
       def code_for_method(meth)
         return nil unless meth.present?
-        class_name = selected_class_path.last
+        class_name = selected_class_name
         return nil unless class_name.present?
         klass = Object.const_get(class_name)
         method = klass.instance_method(meth)

@@ -1,6 +1,6 @@
 module TkInspect
   module ClassBrowser
-    class ClassDataSource
+    class ClassTreeDataSource
       attr_accessor :class_filter
 
       def items_for_path(path)

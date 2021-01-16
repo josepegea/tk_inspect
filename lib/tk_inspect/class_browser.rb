@@ -1,5 +1,6 @@
 require_relative './class_browser/controller'
 require_relative './class_browser/root_component'
 require_relative './class_browser/code_component'
-require_relative './class_browser/class_data_source'
+require_relative './class_browser/class_tree_data_source'
+require_relative './class_browser/class_namespace_data_source'
 require_relative './class_browser/module_method_data_source'

@@ -35,7 +35,12 @@ module TkInspect
 
       def modules_of(class_name)
         return [] unless class_name.present?
-        klass = Object.const_get(class_name)
+        begin
+          klass = Object.const_get(class_name)
+        rescue NameError
+          return []
+        end
+        return [] unless klass.is_a?(Class)
         # We start with the empty module (to show all methods) and the class itself
         modules = [ label_for_all_modules, klass ]
         # Now we add the ancestor classes
@@ -58,7 +63,9 @@ module TkInspect
           mod = Object.const_get(mod)
           methods = mod&.instance_methods(false)
         end
-        methods.map { |m| name_for_method(m) }
+        methods
+          .map { |m| name_for_method(m) }
+          .sort
       end
 
       def name_for_module(mod)

@@ -4,17 +4,31 @@ module TkInspect
       attr_accessor :tk_root
       attr_accessor :main_component
       attr_accessor :eval_binding
+      attr_accessor :modal
+      attr_accessor :root
 
-      def initialize
+      def initialize(options = {})
         @tk_root = nil
         @main_component = nil
         @inspector = nil
         @eval_binding = binding
+        @modal = !!options[:modal]
+        @root = !!options[:root]
+      end
+
+      def focus
+        create_root if @main_component.nil?
+        @tk_root.focus
+        @main_component.focus_on_code
       end
 
       def refresh
-        create_root if @main_component.nil?
         @main_component.regenerate
+        @main_component.focus
+      end
+
+      def modal_loop
+        @main_component.run_modal_loop
       end
 
       def execute(code)
@@ -30,10 +44,36 @@ module TkInspect
       end
 
       def create_root
-        @tk_root = TkComponent::Window.new(title: "Console #{self.object_id}")
+        @tk_root = TkComponent::Window.new(title: "Tk Console", root: @root)
         @main_component = RootComponent.new
         @main_component.console = self
         @tk_root.place_root_component(@main_component)
+        create_menu
+      end
+
+      def create_menu
+        @menubar = TkMenu.new(@tk_root.tk_item.native_item)
+        file = TkMenu.new(@menubar)
+        edit = TkMenu.new(@menubar)
+        edit.add :command, label: "Undo", accelerator: 'Command+z', command: -> { Tk.event_generate(Tk.focus, "<Undo>") }
+        edit.add :command, label: "Redo", accelerator: 'Command+Shift+z', command: -> { Tk.event_generate(Tk.focus, "<Redo>") }
+        edit.add :separator
+        edit.add :command, label: "Cut", accelerator: 'Command+x', command: -> { Tk.event_generate(Tk.focus, "<Cut>") }
+        edit.add :command, label: "Copy", accelerator: 'Command+c', command: -> { Tk.event_generate(Tk.focus, "<Copy>") }
+        edit.add :command, label: "Paste", accelerator: 'Command+v', command: -> { Tk.event_generate(Tk.focus, "<Paste>") }
+        edit.add :command, label: "Clear", accelerator: 'Delete', command: -> { Tk.event_generate(Tk.focus, "<Clear>") }
+        edit.add :separator
+        edit.add :command, label: "Run selection", accelerator: 'Command+r', command: -> { main_component.run_selected(nil) }
+        tools = TkMenu.new(@menubar)
+        tools.add :command, label: "Inspector ...", accelerator: 'Command+Shift+i', command: -> { inspector.refresh }
+        tools.add :command, label: "Class Browser ...", accelerator: 'Command+Shift+b', command: -> { class_browser.refresh }
+        @menubar.add :cascade, menu: file, label: 'File'
+        @menubar.add :cascade, menu: edit, label: 'Edit'
+        @menubar.add :cascade, menu: tools, label: 'Tools'
+        @tk_root.tk_item.native_item['menu'] = @menubar
+        @tk_root.tk_item.native_item.bind('Command-r', -> { main_component.run_selected(nil) })
+        @tk_root.tk_item.native_item.bind('Command-Shift-i', -> { inspector.refresh })
+        @tk_root.tk_item.native_item.bind('Command-Shift-b', -> { class_browser.refresh })
       end
 
       def inspector

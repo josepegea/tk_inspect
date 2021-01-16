@@ -11,6 +11,7 @@ module TkInspect
                      { key: 'klass', text: 'Class', anchor: 'w' },
                      { key: 'value', text: 'Value', anchor: 'e' }
                    ]) do |t|
+              add_obj(t, 'self', eval('self', inspector.inspected_binding))
               inspector.inspected_binding.local_variables.sort.each do |var_name|
                 add_obj(t, var_name, inspector.inspected_binding.local_variable_get(var_name))
               end
@@ -21,10 +22,10 @@ module TkInspect
 
       def add_obj(t, name, obj, parent = nil)
         item = t.tree_node(parent: parent || '', at: 'end', text: name, values: [obj.class.to_s, obj.value_for_tk_inspect])
-        children = obj.children_for_tk_inspect
-        children.sort.each do |child_name, child_value|
-          add_obj(t, child_name, child_value, item)
-        end
+        # children = obj.children_for_tk_inspect
+        # children.each do |child_name, child_value|
+        #   add_obj(t, child_name, child_value, item)
+        # end
       end
     end
   end
