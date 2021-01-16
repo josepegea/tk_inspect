@@ -35,6 +35,11 @@ module TkInspect
         eval(code, eval_binding)
       end
 
+      def say(s)
+        main_component.show_output(s)
+        return nil
+      end
+
       def show_inspector
         inspector.refresh
       end

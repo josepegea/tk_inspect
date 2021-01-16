@@ -51,6 +51,10 @@ module TkInspect
         return unless code.present?
 
         res = console.execute(code)
+        show_output(res)
+      end
+
+      def show_output(res)
         @output.tk_item.append_text(res.to_s + "\n");
       end
 
