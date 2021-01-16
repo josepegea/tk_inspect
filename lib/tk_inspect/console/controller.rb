@@ -72,10 +72,10 @@ module TkInspect
         view.add :command, label: "Bigger font", accelerator: 'Command++', command: -> { main_component.zoom_in(nil) }
         view.add :command, label: "Smaller font", accelerator: 'Command+-', command: -> { main_component.zoom_out(nil) }
         tools = TkMenu.new(@menubar)
-        edit.add :command, label: "Run selection", accelerator: 'Command+r', command: -> { main_component.run_selected(nil) }
-        edit.add :separator
-        edit.add :command, label: "Clear output", accelerator: 'Command+k', command: -> { main_component.clear_output(nil) }
-        edit.add :separator
+        tools.add :command, label: "Run selection", accelerator: 'Command+r', command: -> { main_component.run_selected(nil) }
+        tools.add :separator
+        tools.add :command, label: "Clear output", accelerator: 'Command+k', command: -> { main_component.clear_output(nil) }
+        tools.add :separator
         tools.add :command, label: "Inspector ...", accelerator: 'Command+Shift+i', command: -> { inspector.refresh }
         tools.add :command, label: "Class Browser ...", accelerator: 'Command+Shift+b', command: -> { class_browser.refresh }
         @menubar.add :cascade, menu: file, label: 'File'
