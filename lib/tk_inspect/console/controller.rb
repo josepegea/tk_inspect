@@ -44,11 +44,12 @@ module TkInspect
       end
 
       def create_root
-        @tk_root = TkComponent::Window.new(title: "Tk Console", root: @root)
+        @tk_root = TkComponent::Window.new(title: "Ruby Console", root: @root)
         @main_component = RootComponent.new
         @main_component.console = self
         @tk_root.place_root_component(@main_component)
         create_menu
+        @tk_root.tk_item.native_item.after(100) { @main_component.focus_on_code }
       end
 
       def create_menu
@@ -62,16 +63,25 @@ module TkInspect
         edit.add :command, label: "Copy", accelerator: 'Command+c', command: -> { Tk.event_generate(Tk.focus, "<Copy>") }
         edit.add :command, label: "Paste", accelerator: 'Command+v', command: -> { Tk.event_generate(Tk.focus, "<Paste>") }
         edit.add :command, label: "Clear", accelerator: 'Delete', command: -> { Tk.event_generate(Tk.focus, "<Clear>") }
-        edit.add :separator
-        edit.add :command, label: "Run selection", accelerator: 'Command+r', command: -> { main_component.run_selected(nil) }
+        view = TkMenu.new(@menubar)
+        view.add :command, label: "Bigger font", accelerator: 'Command++', command: -> { main_component.zoom_in(nil) }
+        view.add :command, label: "Smaller font", accelerator: 'Command+-', command: -> { main_component.zoom_out(nil) }
         tools = TkMenu.new(@menubar)
+        edit.add :command, label: "Run selection", accelerator: 'Command+r', command: -> { main_component.run_selected(nil) }
+        edit.add :separator
+        edit.add :command, label: "Clear output", accelerator: 'Command+k', command: -> { main_component.clear_output(nil) }
+        edit.add :separator
         tools.add :command, label: "Inspector ...", accelerator: 'Command+Shift+i', command: -> { inspector.refresh }
         tools.add :command, label: "Class Browser ...", accelerator: 'Command+Shift+b', command: -> { class_browser.refresh }
         @menubar.add :cascade, menu: file, label: 'File'
         @menubar.add :cascade, menu: edit, label: 'Edit'
+        @menubar.add :cascade, menu: view, label: 'View'
         @menubar.add :cascade, menu: tools, label: 'Tools'
         @tk_root.tk_item.native_item['menu'] = @menubar
         @tk_root.tk_item.native_item.bind('Command-r', -> { main_component.run_selected(nil) })
+        @tk_root.tk_item.native_item.bind('Command-k', -> { main_component.clear_output(nil) })
+        @tk_root.tk_item.native_item.bind('Command-+', -> { main_component.zoom_in(nil) })
+        @tk_root.tk_item.native_item.bind('Command-minus', -> { main_component.zoom_out(nil) })
         @tk_root.tk_item.native_item.bind('Command-Shift-i', -> { inspector.refresh })
         @tk_root.tk_item.native_item.bind('Command-Shift-b', -> { class_browser.refresh })
       end
