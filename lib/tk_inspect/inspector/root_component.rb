@@ -6,26 +6,45 @@ module TkInspect
       def generate(parent_component, options = {})
         parse_component(parent_component, options) do |p|
           p.vframe(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |f|
-            f.tree(sticky: 'nsew', h_weight: 1, v_weight: 1, scrollers: 'y',
-                   column_defs: [
-                     { key: 'klass', text: 'Class', anchor: 'w' },
-                     { key: 'value', text: 'Value', anchor: 'e' }
-                   ]) do |t|
-              add_obj(t, 'self', eval('self', inspector.inspected_binding))
-              inspector.inspected_binding.local_variables.sort.each do |var_name|
-                add_obj(t, var_name, inspector.inspected_binding.local_variable_get(var_name))
-              end
-            end
+            f.insert_component(TkComponent::TableViewComponent, self,
+                               data_source: self,
+                               columns: [
+                                 { key: :var, text: 'Variable', anchor: 'w' },
+                                 { key: :klass, text: 'Class', anchor: 'w' },
+                                 { key: :value, text: 'Value', anchor: 'e' }
+                               ],
+                               nested: true,
+                               lazy: true,
+                               sticky: 'nsew', h_weight: 1, v_weight: 1)
           end
         end
       end
 
-      def add_obj(t, name, obj, parent = nil)
-        item = t.tree_node(parent: parent || '', at: 'end', text: name, values: [obj.class.to_s, obj.value_for_tk_inspect])
-        # children = obj.children_for_tk_inspect
-        # children.each do |child_name, child_value|
-        #   add_obj(t, child_name, child_value, item)
-        # end
+      def items_for_path(path = nil)
+        path = [] if path.blank?
+        if path.empty?
+          vars = inspector.inspected_binding.local_variables.sort.map do |var_name|
+            value = inspector.inspected_binding.local_variable_get(var_name)
+            { var: var_name, klass: value.class.to_s, value: value }
+          end
+          self_value = eval('self', inspector.inspected_binding)
+          [ { var: 'self', klass: self_value.class.to_s, value: self_value }, *vars ]
+        else
+          obj = path.last[:value]
+          obj.children_for_tk_inspect.map do |child_name, child_value|
+            { var: child_name, klass: child_value.class.to_s, value: child_value }
+          end
+        end
+      end
+
+      def has_sub_items?(path)
+        path = [] if path.blank?
+        if path.empty?
+          return true # At least we have self
+        else
+          obj = path.last[:value]
+          obj.children_for_tk_inspect.any?
+        end
       end
     end
   end

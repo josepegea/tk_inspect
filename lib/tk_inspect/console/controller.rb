@@ -10,7 +10,6 @@ module TkInspect
       def initialize(options = {})
         @tk_root = nil
         @main_component = nil
-        @inspector = nil
         @eval_binding = binding
         @modal = !!options[:modal]
         @root = !!options[:root]
@@ -40,12 +39,12 @@ module TkInspect
         return nil
       end
 
-      def show_inspector
-        inspector.refresh
+      def open_inspector
+        TkInspect::Inspector::Controller.new(eval_binding).refresh
       end
 
       def open_class_browser
-        class_browser.refresh
+        TkInspect::ClassBrowser::Controller.new.refresh
       end
 
       def create_root
@@ -76,8 +75,8 @@ module TkInspect
         tools.add :separator
         tools.add :command, label: "Clear output", accelerator: 'Command+k', command: -> { main_component.clear_output(nil) }
         tools.add :separator
-        tools.add :command, label: "Inspector ...", accelerator: 'Command+Shift+i', command: -> { inspector.refresh }
-        tools.add :command, label: "Class Browser ...", accelerator: 'Command+Shift+b', command: -> { class_browser.refresh }
+        tools.add :command, label: "Inspector ...", accelerator: 'Command+Shift+i', command: -> { open_inspector }
+        tools.add :command, label: "Class Browser ...", accelerator: 'Command+Shift+b', command: -> { open_class_browser }
         @menubar.add :cascade, menu: file, label: 'File'
         @menubar.add :cascade, menu: edit, label: 'Edit'
         @menubar.add :cascade, menu: view, label: 'View'
@@ -87,16 +86,8 @@ module TkInspect
         @tk_root.tk_item.native_item.bind('Command-k', -> { main_component.clear_output(nil) })
         @tk_root.tk_item.native_item.bind('Command-+', -> { main_component.zoom_in(nil) })
         @tk_root.tk_item.native_item.bind('Command-minus', -> { main_component.zoom_out(nil) })
-        @tk_root.tk_item.native_item.bind('Command-Shift-i', -> { inspector.refresh })
-        @tk_root.tk_item.native_item.bind('Command-Shift-b', -> { class_browser.refresh })
-      end
-
-      def inspector
-        @inspector ||= TkInspect::Inspector::Controller.new(eval_binding)
-      end
-
-      def class_browser
-        @class_browser ||= TkInspect::ClassBrowser::Controller.new
+        @tk_root.tk_item.native_item.bind('Command-Shift-i', -> { open_inspector })
+        @tk_root.tk_item.native_item.bind('Command-Shift-b', -> { open_class_browser })
       end
     end
   end

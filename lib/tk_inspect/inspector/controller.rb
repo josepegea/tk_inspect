@@ -22,7 +22,7 @@ module TkInspect
       end
 
       def create_root
-        @tk_root = TkComponent::Window.new(title: "Inspector #{self.object_id}")
+        @tk_root = TkComponent::Window.new(title: "Inspector")
         @main_component = RootComponent.new
         @main_component.inspector = self
         @tk_root.place_root_component(@main_component)

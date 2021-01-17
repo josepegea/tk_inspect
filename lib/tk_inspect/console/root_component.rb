@@ -81,7 +81,7 @@ module TkInspect
       end
 
       def inspect(e)
-        console.show_inspector
+        console.open_inspector
       end
 
       def open_class_browser(e)
