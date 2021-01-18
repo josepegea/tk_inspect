@@ -10,8 +10,8 @@ module TkInspect
                                data_source: self,
                                columns: [
                                  { key: :var, text: 'Variable', anchor: 'w' },
-                                 { key: :klass, text: 'Class', anchor: 'w' },
-                                 { key: :value, text: 'Value', anchor: 'e' }
+                                 { key: :value, text: 'Value', anchor: 'center' },
+                                 { key: :klass, text: 'Class', anchor: 'center' }
                                ],
                                nested: true,
                                lazy: true,
@@ -25,14 +25,14 @@ module TkInspect
         if path.empty?
           vars = inspector.inspected_binding.local_variables.sort.map do |var_name|
             value = inspector.inspected_binding.local_variable_get(var_name)
-            { var: var_name, klass: value.class.to_s, value: value }
+            { var: var_name, value: value.value_for_tk_inspect, klass: value.class.to_s, real_value: value }
           end
           self_value = eval('self', inspector.inspected_binding)
-          [ { var: 'self', klass: self_value.class.to_s, value: self_value }, *vars ]
+          [ { var: 'self', value: self_value.value_for_tk_inspect, klass: self_value.class.to_s, real_value: self_value }, *vars ]
         else
-          obj = path.last[:value]
+          obj = path.last[:real_value]
           obj.children_for_tk_inspect.map do |child_name, child_value|
-            { var: child_name, klass: child_value.class.to_s, value: child_value }
+            { var: child_name, value: child_value.value_for_tk_inspect, klass: child_value.class.to_s, real_value: child_value }
           end
         end
       end
@@ -42,7 +42,7 @@ module TkInspect
         if path.empty?
           return true # At least we have self
         else
-          obj = path.last[:value]
+          obj = path.last[:real_value]
           obj.children_for_tk_inspect.any?
         end
       end

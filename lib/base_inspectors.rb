@@ -16,6 +16,12 @@ class Object
   end
 end
 
+class String
+  def value_for_tk_inspect
+    frozen? ? dup : self
+  end
+end
+
 class Array
   def value_for_tk_inspect
     "#{size} elements"
