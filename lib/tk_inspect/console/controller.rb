@@ -39,8 +39,8 @@ module TkInspect
         return nil
       end
 
-      def open_inspector
-        TkInspect::Inspector::Controller.new(eval_binding).refresh
+      def open_inspector(expression = nil)
+        TkInspect::Inspector::Controller.new(expression, eval_binding).refresh
       end
 
       def open_class_browser
@@ -72,6 +72,7 @@ module TkInspect
         view.add :command, label: "Smaller font", accelerator: 'Command+-', command: -> { main_component.zoom_out(nil) }
         tools = TkMenu.new(@menubar)
         tools.add :command, label: "Run selection", accelerator: 'Command+r', command: -> { main_component.run_selected(nil) }
+        tools.add :command, label: "Inspect selection", accelerator: 'Command+i', command: -> { main_component.inspect_selected(nil) }
         tools.add :separator
         tools.add :command, label: "Clear output", accelerator: 'Command+k', command: -> { main_component.clear_output(nil) }
         tools.add :separator
@@ -86,6 +87,7 @@ module TkInspect
         @tk_root.tk_item.native_item.bind('Command-k', -> { main_component.clear_output(nil) })
         @tk_root.tk_item.native_item.bind('Command-+', -> { main_component.zoom_in(nil) })
         @tk_root.tk_item.native_item.bind('Command-minus', -> { main_component.zoom_out(nil) })
+        @tk_root.tk_item.native_item.bind('Command-i', -> { main_component.inspect_selected(nil) })
         @tk_root.tk_item.native_item.bind('Command-Shift-i', -> { open_inspector })
         @tk_root.tk_item.native_item.bind('Command-Shift-b', -> { open_class_browser })
       end

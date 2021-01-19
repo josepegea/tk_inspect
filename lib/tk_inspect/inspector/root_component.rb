@@ -16,6 +16,9 @@ module TkInspect
                                nested: true,
                                lazy: true,
                                sticky: 'nsew', h_weight: 1, v_weight: 1)
+            f.hframe(sticky: 'se', padding: '8', h_weight: 1) do |hf|
+              hf.button(text: "Refresh", sticky: 'se', on_click: ->(e) { regenerate })
+            end
           end
         end
       end
@@ -23,12 +26,16 @@ module TkInspect
       def items_for_path(path = nil)
         path = [] if path.blank?
         if path.empty?
-          vars = inspector.inspected_binding.local_variables.sort.map do |var_name|
-            value = inspector.inspected_binding.local_variable_get(var_name)
-            { var: var_name, value: value.value_for_tk_inspect, klass: value.class.to_s, real_value: value }
+          self_exp = inspector.expression || 'self'
+          self_value = eval(self_exp, inspector.inspected_binding)
+          res = [{ var: self_exp, value: self_value.value_for_tk_inspect, klass: self_value.class.to_s, real_value: self_value }]
+          if inspector.expression.blank?
+            vars = inspector.inspected_binding.local_variables.sort.map do |var_name|
+              value = inspector.inspected_binding.local_variable_get(var_name)
+              res << { var: var_name, value: value.value_for_tk_inspect, klass: value.class.to_s, real_value: value }
+            end
           end
-          self_value = eval('self', inspector.inspected_binding)
-          [ { var: 'self', value: self_value.value_for_tk_inspect, klass: self_value.class.to_s, real_value: self_value }, *vars ]
+          res
         else
           obj = path.last[:real_value]
           obj.children_for_tk_inspect.map do |child_name, child_value|

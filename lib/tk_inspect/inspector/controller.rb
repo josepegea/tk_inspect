@@ -4,6 +4,7 @@ module TkInspect
       cattr_accessor :shared_inspector
 
       attr_accessor :inspected_binding
+      attr_accessor :expression
       attr_accessor :tk_root
       attr_accessor :main_component
 
@@ -11,7 +12,8 @@ module TkInspect
         shared_inspector ||= self.new
       end
 
-      def initialize(inspected_binding = binding)
+      def initialize(expression = nil, inspected_binding = binding)
+        @expression = expression
         @inspected_binding = inspected_binding
         @tk_root = nil
         @main_component = nil

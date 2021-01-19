@@ -54,6 +54,14 @@ module TkInspect
         show_output(res)
       end
 
+      def inspect_selected(e)
+        code = @input.tk_item.selected_text
+        code = @input.tk_item.current_line if code.blank?
+        return unless code.present?
+
+        res = console.open_inspector(code)
+      end
+
       def show_output(res)
         @output.tk_item.append_text(res.to_s + "\n");
       end
