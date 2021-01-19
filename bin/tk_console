@@ -5,6 +5,7 @@ require "tk_inspect"
 require "pry"
 
 console = TkInspect::Console::Controller.new(root: true)
+console.execute(ARGV.join(' ')) if ARGV.any?
 console.focus
 
 Tk.mainloop
