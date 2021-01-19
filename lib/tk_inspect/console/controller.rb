@@ -18,7 +18,7 @@ module TkInspect
       def focus
         create_root if @main_component.nil?
         @tk_root.focus
-        @main_component.focus_on_code
+        @tk_root.tk_item.native_item.after(100) { @main_component.focus_on_code }
       end
 
       def refresh
