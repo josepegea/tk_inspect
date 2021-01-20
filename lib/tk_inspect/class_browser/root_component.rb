@@ -24,6 +24,7 @@ module TkInspect
             vf.vpaned(sticky: 'nsew', h_weight: 1, v_weight: 1) do |vp|
               @class_browser_comp = vp.insert_component(TkComponent::RBrowserComponent, self,
                                                         data_source: class_browser.class_data_source,
+                                                        selected_path: class_browser.selected_class_path,
                                                         paned: false,
                                                         sticky: 'nsew', h_weight: 1, v_weight: 1) do |bc|
                 bc.on_event'PathChanged', ->(e) { class_selected(e) }

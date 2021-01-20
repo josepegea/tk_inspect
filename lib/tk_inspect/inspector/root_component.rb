@@ -6,18 +6,19 @@ module TkInspect
       def generate(parent_component, options = {})
         parse_component(parent_component, options) do |p|
           p.vframe(padding: "0 0 0 0", sticky: 'nsew', h_weight: 1, v_weight: 1) do |f|
-            f.insert_component(TkComponent::TableViewComponent, self,
-                               data_source: self,
-                               columns: [
-                                 { key: :var, text: 'Variable', anchor: 'w' },
-                                 { key: :value, text: 'Value', anchor: 'center' },
-                                 { key: :klass, text: 'Class', anchor: 'center' }
-                               ],
-                               nested: true,
-                               lazy: true,
-                               sticky: 'nsew', h_weight: 1, v_weight: 1)
+            @table = f.insert_component(TkComponent::TableViewComponent, self,
+                                        data_source: self,
+                                        columns: [
+                                          { key: :var, text: 'Variable', anchor: 'w' },
+                                          { key: :value, text: 'Value', anchor: 'center' },
+                                          { key: :klass, text: 'Class', anchor: 'center' }
+                                        ],
+                                        nested: true,
+                                        lazy: true,
+                                        sticky: 'nsew', h_weight: 1, v_weight: 1)
             f.hframe(sticky: 'se', padding: '8', h_weight: 1) do |hf|
-              hf.button(text: "Refresh", sticky: 'se', on_click: ->(e) { regenerate })
+              hf.button(text: "Browse selected class", on_click: :browse_class)
+              hf.button(text: "Refresh", on_click: ->(e) { regenerate })
             end
           end
         end
@@ -52,6 +53,14 @@ module TkInspect
           obj = path.last[:real_value]
           obj.children_for_tk_inspect.any?
         end
+      end
+
+      def browse_class(e)
+        item = @table.selected_item
+        return unless item && (class_name = item[:klass])
+        class_browser = TkInspect::ClassBrowser::Controller.new
+        class_browser.select_class_name(class_name)
+        class_browser.refresh
       end
     end
   end

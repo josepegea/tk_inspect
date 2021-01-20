@@ -13,6 +13,15 @@ module TkInspect
         "#{items.count} #{'class'.pluralize(items.count)}"
       end
 
+      def path_for_class(class_name)
+        return unless (klass = Object.const_get(class_name))
+        path = [class_name]
+        while (klass = klass.superclass) do
+          path.unshift(name_for_class(klass))
+        end
+        path
+      end
+
       private
 
       def subclasses_of(class_name)
