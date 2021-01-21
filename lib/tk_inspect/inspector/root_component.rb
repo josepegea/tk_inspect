@@ -58,9 +58,7 @@ module TkInspect
       def browse_class(e)
         item = @table.selected_item
         return unless item && (class_name = item[:klass])
-        class_browser = TkInspect::ClassBrowser::Controller.new
-        class_browser.select_class_name(class_name)
-        class_browser.refresh
+        inspector.browse_class(class_name)
       end
     end
   end

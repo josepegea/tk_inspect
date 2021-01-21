@@ -40,7 +40,18 @@ module TkInspect
       end
 
       def open_inspector(expression = nil)
-        TkInspect::Inspector::Controller.new(expression, eval_binding).refresh
+        if expression.present?
+          val = eval(expression, eval_binding)
+          TkInspect::Inspector::Controller
+            .inspector_for_object(val)
+            .new(expression: expression,
+                 binding: eval_binding,
+                 value: val).refresh
+        else
+          TkInspect::Inspector::Controller
+            .new(expression: expression,
+                 binding: eval_binding).refresh
+        end
       end
 
       def open_class_browser
