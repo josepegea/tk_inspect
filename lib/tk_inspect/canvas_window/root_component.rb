@@ -5,7 +5,7 @@ module TkInspect
 
       def generate(parent_component, options = {})
         parse_component(parent_component, options) do |p|
-          @canvas = p.canvas(sticky: 'nwes', h_weight: 1, v_weight: 1)
+          @canvas = p.canvas(sticky: 'nwes', x_flex: 1, y_flex: 1)
         end
       end
 

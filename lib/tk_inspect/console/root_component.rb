@@ -5,28 +5,28 @@ module TkInspect
 
       def generate(parent_component, options = {})
         parse_component(parent_component, options) do |p|
-          p.vframe(sticky: 'nsew', h_weight: 1, v_weight: 1) do |r|
-            r.hframe(sticky: 'new', padding: '8', h_weight: 0) do |hf|
+          p.vframe(sticky: 'nsew', x_flex: 1, y_flex: 1) do |r|
+            r.hframe(sticky: 'new', padding: '8', x_flex: 0) do |hf|
               hf.label(text: "Write Ruby code here", sticky: 'w')
-              hf.hframe(sticky: 'ne', h_weight: 1) do |buttons|
+              hf.hframe(sticky: 'ne', x_flex: 1) do |buttons|
                 buttons.button(text: "Run selected", default: "active", on_click: :run_selected)
                 buttons.button(text: "Return", on_click: :return_from_modal) if console.modal
               end
             end
-            r.vpaned(sticky: 'nswe', h_weight: 1, v_weight: 1) do |vp|
+            r.vpaned(sticky: 'nswe', x_flex: 1, y_flex: 1) do |vp|
               @input = vp.text(sticky: 'nswe', scrollers: 'y',
                                highlightthickness: 0,
-                               h_weight: 1, v_weight: 1)
-              vp.vframe(padding: "0 0 0 0", sticky: 'nswe', h_weight: 1, v_weight: 1) do |vf|
-                vf.hframe(sticky: 'new', padding: '8', h_weight: 0) do |hf|
+                               x_flex: 1, y_flex: 1)
+              vp.vframe(padding: "0 0 0 0", sticky: 'nswe', x_flex: 1, y_flex: 1) do |vf|
+                vf.hframe(sticky: 'new', padding: '8', x_flex: 0) do |hf|
                   hf.label(text: "Output", padding: '8', sticky: 'w')
-                  hf.hframe(sticky: 'ne', h_weight: 1) do |buttons|
+                  hf.hframe(sticky: 'ne', x_flex: 1) do |buttons|
                     buttons.button(text: "Clear", on_click: :clear_output)
                   end
                 end
                 @output = vf.text(sticky: 'nswe', scrollers: 'y',
                                   background: 'systemSheetBackgroundOpaque', highlightthickness: 0,
-                                  h_weight: 1, v_weight: 1)
+                                  x_flex: 1, y_flex: 1)
               end
             end
           end
