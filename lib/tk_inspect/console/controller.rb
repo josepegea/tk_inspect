@@ -1,6 +1,8 @@
 module TkInspect
   module Console
     class Controller
+      cattr_accessor :main_console
+
       attr_accessor :tk_root
       attr_accessor :main_component
       attr_accessor :eval_binding
@@ -13,6 +15,10 @@ module TkInspect
         @eval_binding = binding
         @modal = !!options[:modal]
         @root = !!options[:root]
+      end
+
+      def make_main
+        self.class.main_console = self
       end
 
       def focus
@@ -69,8 +75,11 @@ module TkInspect
 
       def create_menu
         @menubar = TkMenu.new(@tk_root.tk_item.native_item)
+        @menu = {}
         file = TkMenu.new(@menubar)
+        @menu[:file] = file
         edit = TkMenu.new(@menubar)
+        @menu[:edit] = edit
         edit.add :command, label: "Undo", accelerator: 'Command+z', command: -> { Tk.event_generate(Tk.focus, "<Undo>") }
         edit.add :command, label: "Redo", accelerator: 'Command+Shift+z', command: -> { Tk.event_generate(Tk.focus, "<Redo>") }
         edit.add :separator
@@ -79,9 +88,11 @@ module TkInspect
         edit.add :command, label: "Paste", accelerator: 'Command+v', command: -> { Tk.event_generate(Tk.focus, "<Paste>") }
         edit.add :command, label: "Clear", accelerator: 'Delete', command: -> { Tk.event_generate(Tk.focus, "<Clear>") }
         view = TkMenu.new(@menubar)
+        @menu[:view] = view
         view.add :command, label: "Bigger font", accelerator: 'Command++', command: -> { main_component.zoom_in(nil) }
         view.add :command, label: "Smaller font", accelerator: 'Command+-', command: -> { main_component.zoom_out(nil) }
         tools = TkMenu.new(@menubar)
+        @menu[:tools] = tools
         tools.add :command, label: "Run selection", accelerator: 'Command+r', command: -> { main_component.run_selected(nil) }
         tools.add :command, label: "Inspect selection", accelerator: 'Command+i', command: -> { main_component.inspect_selected(nil) }
         tools.add :separator
