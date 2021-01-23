@@ -1,6 +1,6 @@
 module TkInspect
   module ClassBrowser
-    class Controller
+    class Base
       attr_accessor :tk_root
       attr_accessor :main_component
       attr_accessor :selected_class_path

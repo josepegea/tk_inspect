@@ -1,7 +1,7 @@
 module TkInspect
   module CanvasWindow
     class RootComponent < TkComponent::Base
-      attr_accessor :controller
+      attr_accessor :canvas_window
 
       def generate(parent_component, options = {})
         parse_component(parent_component, options) do |p|

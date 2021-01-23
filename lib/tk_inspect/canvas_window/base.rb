@@ -1,6 +1,6 @@
 module TkInspect
   module CanvasWindow
-    class Controller
+    class Base
       attr_accessor :tk_root
       attr_accessor :main_component
 
@@ -19,16 +19,16 @@ module TkInspect
       def create_root
         @tk_root = TkComponent::Window.new(title: "Canvas Window")
         @main_component = RootComponent.new
-        @main_component.controller = self
+        @main_component.canvas_window = self
         @tk_root.place_root_component(@main_component)
       end
     end
   end
 
   module Console
-    class Controller
+    class Base
       def new_canvas_window
-        TkInspect::CanvasWindow::Controller.new.refresh
+        TkInspect::CanvasWindow::Base.new.refresh
       end
     end
   end

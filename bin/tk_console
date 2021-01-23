@@ -4,7 +4,7 @@ require "bundler/setup"
 require "tk_inspect"
 require "pry"
 
-console = TkInspect::Console::Controller.new(root: true)
+console = TkInspect::Console::Base.new(root: true)
 console.make_main
 console.focus
 console.execute(ARGV.join(' ')) if ARGV.any?

@@ -1,6 +1,6 @@
 module TkInspect
   module Console
-    class Controller
+    class Base
       cattr_accessor :main_console
 
       attr_accessor :tk_root
@@ -48,20 +48,20 @@ module TkInspect
       def open_inspector(expression = nil)
         if expression.present?
           val = eval(expression, eval_binding)
-          TkInspect::Inspector::Controller
+          TkInspect::Inspector::Base
             .inspector_for_object(val)
             .new(expression: expression,
                  binding: eval_binding,
                  value: val).refresh
         else
-          TkInspect::Inspector::Controller
+          TkInspect::Inspector::Base
             .new(expression: expression,
                  binding: eval_binding).refresh
         end
       end
 
       def open_class_browser
-        TkInspect::ClassBrowser::Controller.new.refresh
+        TkInspect::ClassBrowser::Base.new.refresh
       end
 
       def create_root

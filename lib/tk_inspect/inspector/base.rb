@@ -1,6 +1,6 @@
 module TkInspect
   module Inspector
-    class Controller
+    class Base
       cattr_accessor :shared_inspector
       cattr_accessor :custom_inspectors
 
@@ -50,7 +50,7 @@ module TkInspect
       end
 
       def browse_class(class_name)
-        class_browser = TkInspect::ClassBrowser::Controller.new
+        class_browser = TkInspect::ClassBrowser::Base.new
         class_browser.select_class_name(class_name)
         class_browser.refresh
       end
