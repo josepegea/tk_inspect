@@ -45,6 +45,10 @@ module TkInspect
         select_class_path(class_path)
       end
 
+      def show_current_path
+        @main_component.show_current_selection
+      end
+
       def select_class_path(class_path)
         self.selected_class_path = class_path
         module_method_data_source.selected_class = selected_class_name

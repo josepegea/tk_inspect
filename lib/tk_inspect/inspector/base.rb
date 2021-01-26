@@ -53,6 +53,7 @@ module TkInspect
         class_browser = TkInspect::ClassBrowser::Base.new
         class_browser.select_class_name(class_name)
         class_browser.refresh
+        class_browser.show_current_path
       end
 
       def create_main_component

@@ -22,16 +22,16 @@ module TkInspect
               end
             end
             vf.vpaned(sticky: 'nsew', x_flex: 1, y_flex: 1) do |vp|
-              @class_browser_comp = vp.insert_component(TkComponent::RBrowserComponent, self,
+              @class_browser_comp = vp.insert_component(TkComponent::BrowserComponent, self,
                                                         data_source: class_browser.class_data_source,
                                                         selected_path: class_browser.selected_class_path,
-                                                        paned: false,
+                                                        paned: true,
                                                         sticky: 'nsew', x_flex: 1, y_flex: 1) do |bc|
                 bc.on_event'PathChanged', ->(e) { class_selected(e) }
               end
               @module_method_browser_component = vp.insert_component(TkComponent::RBrowserComponent, self,
                                                                      data_source: class_browser.module_method_data_source,
-                                                                     paned: false,
+                                                                     paned: true,
                                                                      max_columns: 2,
                                                                      sticky: 'nsew', x_flex: 1, y_flex: 1) do |bc|
                 bc.on_event'PathChanged', ->(e) { module_method_selected(e) }
@@ -40,6 +40,10 @@ module TkInspect
             end
           end
         end
+      end
+
+      def show_current_selection
+        @class_browser_comp.show_current_selection
       end
 
       def class_selected(e)
