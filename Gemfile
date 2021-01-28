@@ -9,5 +9,3 @@ group :development, :test do
   gem 'pry'
   gem 'pry-byebug'
 end
-
-gem 'tk_component', path: '../tk_component'

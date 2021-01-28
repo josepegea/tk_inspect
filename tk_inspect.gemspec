@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Josep Egea"]
   spec.email         = ["jes@josepegea.com"]
 
-  spec.summary       = %q{Poor's man Smalltalk environment for Ruby using TK}
-  spec.description   = %q{Poor's man Smalltalk environment for Ruby using TK}
+  spec.summary       = %q{Poor's man Smalltalk-like environment for Ruby using TK}
+  spec.description   = %q{Poor's man Smalltalk-like environment for Ruby using TK}
   spec.homepage      = "https://github.com/josepegea/tk_inspect"
   spec.license       = "MIT"
 
@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # spec.add_dependency "tk_component", "~> 0.1.0"
+  spec.add_dependency "tk_component", "~> 0.1.2"
 
   spec.add_dependency "rouge", "~> 3.26"
 
