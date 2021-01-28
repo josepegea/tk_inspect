@@ -22,6 +22,10 @@ module TkInspect
         @main_component.canvas_window = self
         @tk_root.place_root_component(@main_component)
       end
+
+      def new_turtle
+        TkComponent::Turtle.new(canvas: main_component.canvas)
+      end
     end
   end
 
