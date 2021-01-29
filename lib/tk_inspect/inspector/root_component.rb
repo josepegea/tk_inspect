@@ -3,23 +3,21 @@ module TkInspect
     class RootComponent < TkComponent::Base
       attr_accessor :inspector
 
-      def generate(parent_component, options = {})
-        parse_component(parent_component, options) do |p|
-          p.vframe(padding: "0 0 0 0", sticky: 'nsew', x_flex: 1, y_flex: 1) do |f|
-            @table = f.insert_component(TkComponent::TableViewComponent, self,
-                                        data_source: self,
-                                        columns: [
-                                          { key: :var, text: 'Variable', anchor: 'w' },
-                                          { key: :value, text: 'Value', anchor: 'center' },
-                                          { key: :klass, text: 'Class', anchor: 'center' }
-                                        ],
-                                        nested: true,
-                                        lazy: true,
-                                        sticky: 'nsew', x_flex: 1, y_flex: 1)
-            f.hframe(sticky: 'se', padding: '8', x_flex: 1) do |hf|
-              hf.button(text: "Browse selected class", on_click: :browse_class)
-              hf.button(text: "Refresh", on_click: ->(e) { regenerate })
-            end
+      def render(p, parent_component)
+        p.vframe(padding: "0 0 0 0", sticky: 'nsew', x_flex: 1, y_flex: 1) do |f|
+          @table = f.insert_component(TkComponent::TableViewComponent, self,
+                                      data_source: self,
+                                      columns: [
+                                        { key: :var, text: 'Variable', anchor: 'w' },
+                                        { key: :value, text: 'Value', anchor: 'center' },
+                                        { key: :klass, text: 'Class', anchor: 'center' }
+                                      ],
+                                      nested: true,
+                                      lazy: true,
+                                      sticky: 'nsew', x_flex: 1, y_flex: 1)
+          f.hframe(sticky: 'se', padding: '8', x_flex: 1) do |hf|
+            hf.button(text: "Browse selected class", on_click: :browse_class)
+            hf.button(text: "Refresh", on_click: ->(e) { regenerate })
           end
         end
       end

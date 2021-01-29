@@ -3,10 +3,8 @@ module TkInspect
     class RootComponent < TkComponent::Base
       attr_accessor :canvas_window
 
-      def generate(parent_component, options = {})
-        parse_component(parent_component, options) do |p|
-          @canvas = p.canvas(sticky: 'nwes', x_flex: 1, y_flex: 1)
-        end
+      def render(p, parent_component)
+        @canvas = p.canvas(sticky: 'nwes', x_flex: 1, y_flex: 1)
       end
 
       def canvas

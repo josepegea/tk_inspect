@@ -33,12 +33,10 @@ module TkInspect
       attr_accessor :method_name
       attr_accessor :method_line
 
-      def generate(parent_component, options = {})
-        parse_component(parent_component, options) do |p|
-          p.vframe(padding: "0 0 0 0", sticky: 'nsew', x_flex: 1, y_flex: 1) do |vf|
-            @filename_label = vf.label(font: 'TkSmallCaptionFont', sticky: 'ewn', x_flex: 1, y_flex: 0)
-            @code_text = vf.text(sticky: 'nswe', x_flex: 1, y_flex: 1, wrap: 'none', scrollers: 'xy')
-          end
+      def render(p, parent_component)
+        p.vframe(padding: "0 0 0 0", sticky: 'nsew', x_flex: 1, y_flex: 1) do |vf|
+          @filename_label = vf.label(font: 'TkSmallCaptionFont', sticky: 'ewn', x_flex: 1, y_flex: 0)
+          @code_text = vf.text(sticky: 'nswe', x_flex: 1, y_flex: 1, wrap: 'none', scrollers: 'xy')
         end
       end
 
