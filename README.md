@@ -10,9 +10,7 @@ create the UI.
 Once added the gem to your project or global environment, you can
 launch the graphic console using
 
-``` sh
-bundle exec tk_console
-```
+    $ bundle exec tk_console
 
 If you add
 [tk_inspect_rails](http://github.com/josepegea/tk_inspect_rails) you
