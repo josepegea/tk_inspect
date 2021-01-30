@@ -1,8 +1,25 @@
 # TkInspect
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/tk_inspect`. To experiment with that code, run `bin/console` for an interactive prompt.
+Provides a poor man's version of the GUI development environment
+created for original Smalltalk systems, including a console (workspace
+in Smalltalk), inspectors and class browser.
 
-TODO: Delete this and the text above, and describe your gem
+Uses [tk_component](http://github.com/josepegea/tk_component) to
+create the UI.
+
+Once added the gem to your project or global environment, you can
+launch the graphic console using
+
+``` sh
+bundle exec tk_console
+```
+
+If you add
+[tk_inspect_rails](http://github.com/josepegea/tk_inspect_rails) you
+will also get some goodies for playing with Rails applications inside
+the GUI playground.
+
+**WARNING**: This is very much a work in progress!!
 
 ## Installation
 
