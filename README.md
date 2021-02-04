@@ -4,6 +4,8 @@ Provides a poor man's version of the GUI development environment
 created for original Smalltalk systems, including a console (workspace
 in Smalltalk), inspectors and a class browser.
 
+![GIF demo](https://i.ibb.co/bNmLGbc/tk-inspect-teaser.gif)
+
 It uses [TkComponent](http://github.com/josepegea/tk_component) to
 create the UI.
 
